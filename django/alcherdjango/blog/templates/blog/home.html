@@ -1,0 +1,312 @@
+{% load static %}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alcheringa</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}" />
+    <script src="https://kit.fontawesome.com/7f37357fa1.js" crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+    <header>
+        <span><i class="fa-solid fa-house" style="margin-right: 8px;"></i>Home</span>
+        <span id="user"><img src="{% static 'blog/circle.png' %}" alt="circle">
+            <span>user</span>
+        </span>
+    </header>
+    <section id="a">
+
+        <section class="sidebar">
+
+            <ul>
+                <li> <button class="newitem">
+                        <i class="fa-solid fa-plus"></i> New item
+                    </button>
+                </li>
+
+
+                <li> <i class="fa-solid fa-table-cells-large" style="margin-right: 8px;"></i>Dashboard
+
+                    <button class="dropdownbtn1">
+                        <i class="fa-solid fa-caret-down"></i>
+                    </button>
+
+                <li class="dropdown1">Commerce</li>
+                <li class="dropdown1">Analytics</li>
+                <li class="dropdown1">Crypto</li>
+                <li class="dropdown1">Helpdesk</li>
+                <li class="dropdown1">Monitoring</li>
+                <li class="dropdown1">Fitness</li>
+
+                </li>
+
+
+
+                <li><i class="fa-solid fa-table-cells-large" style="margin-right: 8px;"></i>Application
+
+                    <button class="dropdownbtn2">
+                        <i class="fa-solid fa-caret-down"></i>
+                    </button>
+
+                <li class="dropdown2">a</li>
+                <li class="dropdown2">b</li>
+
+                </li>
+
+
+                <li> <i class="fa-solid fa-table-cells-large" style="margin-right: 8px;"></i>Elements
+
+                    <button class="dropdownbtn3">
+                        <i class="fa-solid fa-caret-down"></i>
+                    </button>
+                <li class="dropdown3">a</li>
+                <li class="dropdown3">b</li>
+                <li class="dropdown3">c</li>
+
+                </li>
+
+
+
+            </ul>
+        </section>
+
+
+
+        <section class="main">
+            <p class="heading">Welcome</p>
+            <div id="username">
+                <img src="{% static 'blog/circlee.png' %}" alt="circle" style="height: 150px; ">
+                <p class="heading">Username</p>
+
+            </div>
+
+            <p class="heading">Form Title</p>
+            <p class="heading " style="font-size: 20px;"> Lorem Lorem ipsum dolor sit amet consectetur adipisicing elit
+                ipsum dolor sit, amet consectetur adipisic</p>
+
+            <p id="errorbox"> <i class="fa-solid fa-circle-exclamation"></i>Lorem itibu soque aperiam dolorem
+                accusantium iste earum.</p>
+
+             <table id="userTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
+
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <button class="edit-btn" data-id="{{ user.id }}" data-name="{{ user.first_name }} {{ user.last_name }}"
+                        data-username="{{ user.username }}" data-email="{{ user.email }}"><span><i class="fa-solid fa-file-pen"></i> Edit </span></button>
+                    <button class="delete-btn" data-id="{{ user.id }}"><span><i class="fa-solid fa-trash"></i> Delete </span></button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button id="add-user-btn"> <i class="fa-solid fa-plus"></i> Add User</button>
+
+
+    
+    <div id="add-user-modal" style="display:none;">
+        <form id="add-user-form">
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" required>
+        
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" required>
+        
+            <label for="username">Username:</label>
+            <input type="text" id="usernames" name="username" required>
+        
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        
+            <button type="submit">Add User</button>
+            <button type="button" id="close-modal">Close</button>
+        </form>
+
+    </div>
+    <div id="edit-user-modal" style="display:none;">
+        <form id="edit-user-form">
+            <input type="hidden" id="edit-user-id" name="user_id">
+            <label for="edit-first_name">First Name:</label>
+            <input type="text" id="edit-first_name" name="first_name" required>
+    
+            <label for="edit-last_name">Last Name:</label>
+            <input type="text" id="edit-last_name" name="last_name" required>
+    
+            <label for="edit-username">Username:</label>
+            <input type="text" id="edit-username" name="username" required>
+    
+            <label for="edit-email">Email:</label>
+            <input type="email" id="edit-email" name="email" required>
+    
+            <button type="submit">Save Changes</button>
+            <button type="button" id="close-edit-modal">Close</button>
+        </form>
+    </div>
+    
+    <div id="delete-user-modal" style="display:none;">
+        <p>Are you sure you want to delete this user?</p>
+        <button id="confirm-delete-btn">Yes, Delete</button>
+        <button id="cancel-delete-btn">Cancel</button>
+    </div>
+        </section>
+       
+    </section>
+    
+    
+    <script>
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+            function toggleDropdown(buttonClass, dropdownClass) {
+                const button = document.querySelector(buttonClass);
+                const dropdownItems = document.querySelectorAll(dropdownClass);
+
+                button.addEventListener('click', () => {
+                    dropdownItems.forEach(item => {
+                        if (item.style.display === 'block') {
+                            item.style.display = 'none';
+                        } else {
+                            item.style.display = 'block';
+
+                        }
+                    });
+                });
+            }
+
+            toggleDropdown('.dropdownbtn1', '.dropdown1');
+            toggleDropdown('.dropdownbtn2', '.dropdown2');
+            toggleDropdown('.dropdownbtn3', '.dropdown3');
+        });
+
+        
+        var csrfToken = "{{ csrf_token }}";
+
+        document.getElementById('add-user-btn').addEventListener('click', function () {
+            document.getElementById('add-user-modal').style.display = 'block';
+        });
+
+        document.getElementById('close-modal').addEventListener('click', function () {
+            document.getElementById('add-user-modal').style.display = 'none';
+        });
+
+        document.getElementById('add-user-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            fetch('/users/add/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrfToken 
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload(); 
+                    } else {
+                        alert('Error adding user');
+                    }
+                });
+        });
+
+
+        document.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const userId = this.getAttribute('data-id');
+                    const userName = this.getAttribute('data-name').split(' ');
+                    const userUsername = this.getAttribute('data-username');
+                    const userEmail = this.getAttribute('data-email');
+
+                    document.getElementById('edit-user-id').value = userId;
+                    document.getElementById('edit-first_name').value = userName[0];
+                    document.getElementById('edit-last_name').value = userName[1] || '';
+                    document.getElementById('edit-username').value = userUsername;
+                    document.getElementById('edit-email').value = userEmail;
+
+                    document.getElementById('edit-user-modal').style.display = 'block';
+                });
+            });
+
+            document.getElementById('close-edit-modal').addEventListener('click', function () {
+                document.getElementById('edit-user-modal').style.display = 'none';
+            });
+
+            document.getElementById('edit-user-form').addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const formData = new FormData(this);
+
+                    fetch('/users/edit/', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                             'X-CSRFToken': csrfToken 
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                location.reload(); 
+                            } else {
+                                alert('Error updating user: ' + data.error);
+                            }
+                        });
+                });
+ let userIdToDelete;
+
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            userIdToDelete = this.getAttribute('data-id');
+            document.getElementById('delete-user-modal').style.display = 'block';
+        });
+    });
+
+    document.getElementById('confirm-delete-btn').addEventListener('click', function () {
+        fetch(`/users/delete/${userIdToDelete}/`, {
+            method: 'POST',
+            headers: {
+                 'X-CSRFToken': csrfToken 
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error deleting user: ' + data.error);
+                }
+            });
+    });
+
+    document.getElementById('cancel-delete-btn').addEventListener('click', function () {
+        document.getElementById('delete-user-modal').style.display = 'none';
+    });
+
+    </script>
+ 
+</body>
+
+</html>
